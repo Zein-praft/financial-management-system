@@ -1,72 +1,50 @@
-<?php
+<x-guest-layout title="Login">
+    <div class="w-full max-w-md bg-white dark:bg-slate-800 shadow-2xl rounded-3xl p-8 md:p-12 relative transition-colors duration-300">
+        
+        <!-- Dark Mode Toggle -->
+        <button onclick="toggleDarkMode()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-10">
+            <i class="fa-solid fa-sun text-lg hidden dark:block text-yellow-400"></i>
+            <i class="fa-solid fa-moon text-lg block dark:hidden text-indigo-600"></i>
+        </button>
 
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
-
-new #[Layout('layouts.guest')] class extends Component
-{
-    public string $name = '';
-    public string $email = '';
-    public string $password = '';
-    public string $password_confirmation = '';
-
-    /**
-     * Handle an incoming registration request.
-     */
-    public function register(): void
-    {
-        $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        $validated['password'] = Hash::make($validated['password']);
-
-        event(new Registered($user = User::create($validated)));
-
-        Auth::login($user);
-
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
-    }
-}; ?>
-
-<div>
-    <form wire:submit="register">
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        <!-- Tabs (Login Active) -->
+        <div class="mb-8 text-center">
+            <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Welcome Back</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Please enter your details to continue.</p>
+            
+            <div class="flex gap-6 mt-6 border-b border-slate-200 dark:border-slate-700 justify-center">
+                <a href="{{ route('login') }}" class="pb-2 text-sm font-semibold text-primary border-b-2 border-primary transition-colors cursor-default">Sign In</a>
+                <a href="{{ route('register') }}" class="pb-2 text-sm font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">Sign Up</a>
+            </div>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <!-- Login Form -->
+        <form method="POST" action="{{ route('login') }}" class="space-y-5">
+            @csrf
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required autofocus class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="john@example.com">
+                @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
+                <input type="password" name="password" required class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="•••••••">
+                @error('password') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
 
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <div class="flex justify-between items-center text-sm">
+                <label class="flex items-center gap-2 cursor-pointer text-slate-600 dark:text-slate-400">
+                    <input type="checkbox" name="remember" class="rounded text-primary focus:ring-primary"> Remember me
+                </label>
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-primary hover:underline font-medium">Forgot Password?</a>
+                @endif
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primaryDark active:scale-95 transition-all shadow-lg shadow-indigo-200 dark:shadow-none">Sign In</button>
+        </form>
 
             <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
                             type="password"
