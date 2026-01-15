@@ -1,24 +1,17 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-
-    <!-- Kartu Summary (Income, Expense, Balance) -->
-    <livewire:dashboard />
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-        
-        <!-- Kolom Kiri (Chart & List) -->
-        <div class="lg:col-span-2 space-y-8">
-            <livewire:report />
-            <livewire:transaction-list />
-        </div>
-
-        <!-- Kolom Kanan (Form Input) -->
-        <div class="lg:col-span-1">
-            <div class="sticky top-24">
-                <livewire:transaction-form />
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    {{ __("You're logged in!") }}
+                </div>
             </div>
         </div>
     </div>
-
-@endsection
+</x-app-layout>
