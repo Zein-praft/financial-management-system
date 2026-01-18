@@ -5,64 +5,68 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth; // <--- TAMBAHKAN INI
 
 class TransactionForm extends Component
 {
+    public $category_name;
     public $type = 'income';
     public $amount;
-    public $category_id;
     public $date;
     public $note;
 
-    public $categories = [];
-
-    public function mount()
+    public function mount(): void
     {
-        $this->date = now()->format('Y-m-d');
-        $this->loadCategories();
-    }
-
-    public function updatedType()
-    {
-        $this->category_id = null;
-        $this->loadCategories();
-    }
-
-    public function loadCategories()
-    {
-        $this->categories = Category::where('type', $this->type)->get();
+        $this->date = date('Y-m-d');
     }
 
     protected $rules = [
         'type' => 'required|in:income,expense',
-        'category_id' => 'required|exists:categories,id',
+        'category_name' => 'required|string|max:255',
         'amount' => 'required|numeric|min:0',
         'date' => 'required|date',
-        'note' => 'nullable|string',
+        'note' => 'nullable|string|max:255',
     ];
 
     public function save()
     {
         $this->validate();
 
+        $category = Category::firstOrCreate(
+            [
+                'name' => trim($this->category_name),
+                'type' => $this->type,
+            ],
+            [
+                'name' => trim($this->category_name),
+                'type' => $this->type,
+            ]
+        );
+
         Transaction::create([
+            // GANTI auth()->id() MENJADI Auth::id()
+            'user_id' => Auth::id(), 
             'type' => $this->type,
-            'category_id' => $this->category_id,
+            'category_id' => $category->id,
             'amount' => $this->amount,
             'date' => $this->date,
             'note' => $this->note,
         ]);
 
-        $this->reset(['amount', 'category_id', 'note']);
-        $this->date = now()->format('Y-m-d');
+        $this->reset(['amount', 'note', 'category_name']);
+        $this->date = date('Y-m-d');
 
         $this->dispatch('transaction-updated');
-
-        session()->flash('message', 'Transaksi berhasil disimpan');
+        
+        session()->flash('message', 'Transaksi berhasil disimpan.');
     }
 
     public function render()
     {
-        return view('livewire.transaction-form');
+        $categories = Category::all();
+
+        return view('livewire.transaction-form', [
+            'categories' => $categories
+        ]);
     }
 }

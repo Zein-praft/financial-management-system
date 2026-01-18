@@ -1,16 +1,18 @@
-<div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-6">
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-            <h2 class="text-lg font-bold text-slate-800">Analytics</h2>
+            <h2 class="text-lg font-bold text-slate-800 dark:text-white">Analytics</h2>
             <p class="text-xs text-slate-400">Income vs Expense Overview</p>
         </div>
         
-        <!-- Filter Buttons -->
-        <div class="inline-flex bg-slate-100 p-1 rounded-xl">
-            <button wire:click="setFilter('today')" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'today' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">Today</button>
-            <button wire:click="setFilter('week')" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'week' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">Week</button>
-            <button wire:click="setFilter('month')" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'month' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">Month</button>
-            <button wire:click="setFilter('all')" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'all' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">All</button>
+        <!-- Filter Buttons (Updated with Year) -->
+        <div class="inline-flex bg-slate-100 dark:bg-slate-700 p-1 rounded-xl flex flex-wrap gap-1">
+            <button wire:click="setFilter('today')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'today' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Today</button>
+            <button wire:click="setFilter('week')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'week' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Week</button>
+            <button wire:click="setFilter('month')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'month' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Month</button>
+            <!-- NEW BUTTON -->
+            <button wire:click="setFilter('year')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'year' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Year</button>
+            <button wire:click="setFilter('all')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'all' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">All</button>
         </div>
     </div>
 
