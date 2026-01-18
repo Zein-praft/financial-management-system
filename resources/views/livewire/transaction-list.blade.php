@@ -1,15 +1,16 @@
-<div class="bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden">
+<div class="bg-white rounded-2xl shadow-blue-500/20 shadow-lg border border-slate-100 overflow-hidden">
     <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
         <div>
             <h2 class="text-lg font-bold text-slate-800">Transactions</h2>
             <p class="text-xs text-slate-400 mt-0.5">{{ $transactions->count() }} transactions found</p>
         </div>
     </div>
-    
+
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                <!-- ROW JUDUL TABEL (Header) DIKASIH WARNA BIRU MUDA SEGAR -->
+                <tr class="bg-blue-50 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-100">
                     <th class="px-6 py-4">Transaction</th>
                     <th class="px-6 py-4">Category</th>
                     <th class="px-6 py-4">Date</th>
@@ -19,40 +20,47 @@
             </thead>
             <tbody class="text-sm text-slate-600 divide-y divide-slate-50">
                 @forelse($transactions as $transaction)
-                    <?php 
-                        $isIncome = $transaction->type == 'income';
-                        $iconBg = $isIncome ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-500';
-                        $darkIconBg = $isIncome ? 'dark:bg-emerald-900/50' : 'dark:bg-red-900/50';
-                        $iconClass = $this->getIcon($transaction->category->name ?? ''); 
+                    <?php
+                    $isIncome = $transaction->type == 'income';
+                    $iconBg = $isIncome ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-500';
+                    $darkIconBg = $isIncome ? 'dark:bg-emerald-900/50' : 'dark:bg-red-900/50';
+                    $iconClass = $this->getIcon($transaction->category->name ?? '');
                     ?>
-                    
+
                     <tr class="hover:bg-slate-50/80 group transition-colors duration-200">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="h-10 w-10 flex-shrink-0">
-                                    <div class="h-10 w-10 rounded-full {{ $iconBg }} {{ $darkIconBg }} flex items-center justify-center">
-                                        <i class="fa-solid {{ $isIncome ? 'fa-arrow-down' : 'fa-arrow-up' }} text-xs"></i>
+                                    <div
+                                        class="h-10 w-10 rounded-full {{ $iconBg }} {{ $darkIconBg }} flex items-center justify-center">
+                                        <i
+                                            class="fa-solid {{ $isIncome ? 'fa-arrow-down' : 'fa-arrow-up' }} text-xs"></i>
                                     </div>
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-slate-900">{{ $transaction->note ?: $transaction->category->name }}</div>
+                                    <div class="text-sm font-medium text-slate-900">
+                                        {{ $transaction->note ?: $transaction->category->name }}</div>
                                     <div class="text-xs text-slate-400">{{ $transaction->category->name ?? '-' }}</div>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-500 border border-slate-200">
+                            <span
+                                class="px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-500 border border-slate-200">
                                 <i class="fa-solid {{ $iconClass }} mr-1"></i> {{ $transaction->category->name }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
                             {{ \Carbon\Carbon::parse($transaction->date)->isoFormat('DD MMM YYYY') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold {{ $isIncome ? 'text-emerald-600' : 'text-slate-800' }}">
+                        <td
+                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold {{ $isIncome ? 'text-emerald-600' : 'text-slate-800' }}">
                             {{ $isIncome ? '+' : '-' }} Rp {{ number_format($transaction->amount, 0, ',', '.') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                            <button wire:click="delete({{ $transaction->id }})" class="text-slate-300 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-50" onclick="if(!confirm('Yakin ingin menghapus?')) return false;">
+                            <button wire:click="delete({{ $transaction->id }})"
+                                class="text-slate-300 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-50"
+                                onclick="if(!confirm('Yakin ingin menghapus?')) return false;">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </td>
