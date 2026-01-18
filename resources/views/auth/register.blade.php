@@ -1,0 +1,59 @@
+<x-guest-layout title="Register">
+    <div class="w-full max-w-md bg-white dark:bg-slate-800 shadow-2xl rounded-3xl p-8 md:p-12 relative transition-colors duration-300">
+        
+        <!-- Dark Mode Toggle -->
+        <button onclick="toggleDarkMode()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors z-10">
+            <i class="fa-solid fa-sun text-lg hidden dark:block text-yellow-400"></i>
+            <i class="fa-solid fa-moon text-lg block dark:hidden text-indigo-600"></i>
+        </button>
+
+        <!-- Tabs (Register Active) -->
+        <div class="mb-8 text-center">
+            <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Create Account</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Join us to manage your finances.</p>
+            
+            <div class="flex gap-6 mt-6 border-b border-slate-200 dark:border-slate-700 justify-center">
+                <a href="{{ route('login') }}" class="pb-2 text-sm font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">Sign In</a>
+                <a href="{{ route('register') }}" class="pb-2 text-sm font-semibold text-primary border-b-2 border-primary transition-colors cursor-default">Sign Up</a>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <form method="POST" action="{{ route('register') }}" class="space-y-5">
+            @csrf
+
+            <!-- Name -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
+                <input type="text" name="name" value="{{ old('name') }}" required autofocus class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="John Doe">
+                @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="john@example.com">
+                @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
+                <input type="password" name="password" required class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="•••••••">
+                @error('password') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Confirm Password</label>
+                <input type="password" name="password_confirmation" required class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="•••••••">
+            </div>
+
+            <button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primaryDark active:scale-95 transition-all shadow-lg shadow-indigo-200 dark:shadow-none">Create Account</button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+            By continuing, you agree to our <a href="#" class="text-primary hover:underline">Terms of Service</a> and <a href="#" class="text-primary hover:underline">Privacy Policy</a>.
+        </p>
+    </div>
+</x-guest-layout>
