@@ -14,9 +14,23 @@ class TransactionForm extends Component
     public $date;
     public $note;
 
-    public function mount(): void
+    public $categories = [];
+
+    public function mount()
     {
-        $this->date = date('Y-m-d');
+        $this->date = now()->format('Y-m-d');
+        $this->loadCategories();
+    }
+
+    public function updatedType()
+    {
+        $this->category_id = null;
+        $this->loadCategories();
+    }
+
+    public function loadCategories()
+    {
+        $this->categories = Category::where('type', $this->type)->get();
     }
 
     protected $rules = [
@@ -24,7 +38,7 @@ class TransactionForm extends Component
         'category_id' => 'required|exists:categories,id',
         'amount' => 'required|numeric|min:0',
         'date' => 'required|date',
-        'note' => 'nullable|string|max:255',
+        'note' => 'nullable|string',
     ];
 
     public function save()
@@ -39,24 +53,16 @@ class TransactionForm extends Component
             'note' => $this->note,
         ]);
 
-        // Reset Form
         $this->reset(['amount', 'category_id', 'note']);
-        $this->date = date('Y-m-d');
+        $this->date = now()->format('Y-m-d');
 
-        // Kirim event ke komponen lain (Dashboard & TransactionList)
         $this->dispatch('transaction-updated');
-        
-        // Tampilkan notifikasi (Optional: flash message)
-        session()->flash('message', 'Transaksi berhasil disimpan.');
+
+        session()->flash('message', 'Transaksi berhasil disimpan');
     }
 
     public function render()
     {
-        // Ambil kategori berdasarkan tipe yang dipilih
-        $categories = Category::where('type', $this->type)->get();
-
-        return view('livewire.transaction-form', [
-            'categories' => $categories
-        ]);
+        return view('livewire.transaction-form');
     }
 }
