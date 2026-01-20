@@ -1,15 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Dashboard;
 
-Route::view('/', 'welcome');
+// 1. HOME (LEMPAR KE LOGIN)
+Route::get('/', function () {
+    return redirect('/login');
+});
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+// 2. LOGIN (STANDALONE, TANPA MIDDLEWARE GUEST)
+Route::view('/login', 'livewire.pages.auth.login')
+    ->name('login');
+
+// 3. REGISTER
+Route::view('/register', 'livewire.pages.auth.register')
+    ->name('register');
+
+// 4. DASHBOARD 
+Route::get('/dashboard', Dashboard::class) 
+    ->middleware('auth')
     ->name('dashboard');
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
+// 5. PROFILE & LAINNYA
+Route::view('/profile', 'profile')
+    ->middleware('auth')
     ->name('profile');
 
+// Require file auth bawaan breeze (forgot password, dll)
 require __DIR__.'/auth.php';
+

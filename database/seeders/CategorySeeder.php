@@ -14,16 +14,18 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            // Income
-            ['name' => 'Gaji', 'type' => 'income'],
-            ['name' => 'Bonus', 'type' => 'income'],
-            ['name' => 'Investasi', 'type' => 'income'],
-            
-            // Expense
-            ['name' => 'Makanan', 'type' => 'expense'],
-            ['name' => 'Transportasi', 'type' => 'expense'],
-            ['name' => 'Tagihan', 'type' => 'expense'],
-            ['name' => 'Belanja', 'type' => 'expense'],
+            ['name' => 'Salary', 'type' => 'income'],
+            ['name' => 'Freelance', 'type' => 'income'],
+            ['name' => 'Business / Sales', 'type' => 'income'],
+            ['name' => 'Other Income', 'type' => 'income'],
+
+            // 💸 Expense
+            ['name' => 'Food & Dining', 'type' => 'expense'],
+            ['name' => 'Transportation', 'type' => 'expense'],
+            ['name' => 'Utilities', 'type' => 'expense'],
+            ['name' => 'Shopping', 'type' => 'expense'],
+            ['name' => 'Entertainment', 'type' => 'expense'],
+            ['name' => 'Other Expense', 'type' => 'expense'],
         ];
 
         foreach ($categories as $category) {
