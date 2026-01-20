@@ -46,6 +46,7 @@ class Dashboard extends Component
     {
         $query = Transaction::query();
 
+        // LOGIC FILTER YANG LEBIH ROBUST
         if ($this->chartPeriod == 'today') {
             $query->whereDate('date', today());
         } elseif ($this->chartPeriod == 'month') {

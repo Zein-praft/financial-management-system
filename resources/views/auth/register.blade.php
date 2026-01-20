@@ -52,8 +52,21 @@
             <button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primaryDark active:scale-95 transition-all shadow-lg shadow-indigo-200 dark:shadow-none">Create Account</button>
         </form>
 
-        <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-            By continuing, you agree to our <a href="#" class="text-primary hover:underline">Terms of Service</a> and <a href="#" class="text-primary hover:underline">Privacy Policy</a>.
-        </p>
-    </div>
-</x-guest-layout>
+            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
+                            type="password"
+                            name="password_confirmation" required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
+                {{ __('Already registered?') }}
+            </a>
+
+            <x-primary-button class="ms-4">
+                {{ __('Register') }}
+            </x-primary-button>
+        </div>
+    </form>
+</div>

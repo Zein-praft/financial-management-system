@@ -9,7 +9,6 @@ Route::get('/', function () {
 });
 
 // 2. LOGIN (STANDALONE, TANPA MIDDLEWARE GUEST)
-// Kita hilangkan 'guest' biar user yg stuck bisa masuk halaman ini
 Route::view('/login', 'livewire.pages.auth.login')
     ->name('login');
 
@@ -17,15 +16,16 @@ Route::view('/login', 'livewire.pages.auth.login')
 Route::view('/register', 'livewire.pages.auth.register')
     ->name('register');
 
-// 4. DASHBOARD (MENGGUNAKAN FILE BARU)
-Route::view('/dashboard', 'dashboard_standalone')
+// 4. DASHBOARD 
+Route::get('/dashboard', Dashboard::class) 
     ->middleware('auth')
     ->name('dashboard');
 
-// 5. PROFILE & LAINNYA (BAWAAN BREEZE)
+// 5. PROFILE & LAINNYA
 Route::view('/profile', 'profile')
     ->middleware('auth')
     ->name('profile');
 
 // Require file auth bawaan breeze (forgot password, dll)
 require __DIR__.'/auth.php';
+

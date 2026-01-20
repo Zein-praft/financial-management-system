@@ -22,6 +22,7 @@ class Transaction extends Model
         'amount',
         'note',
         'date',
+        'updated_at',
     ];
 
     /**

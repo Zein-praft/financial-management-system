@@ -3,9 +3,11 @@
         <i class="fa-solid fa-circle-plus text-blue-500"></i> Add Transaction
     </h2>
     
-    @if(session()->has('message'))
-        <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm border border-green-200">
-            {{ session('message') }}
+    {{-- NOTIFIKASI SUKSES (DIPERBAIKI: Pake variabel $message, bukan session) --}}
+    @if($message)
+        <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm border border-green-200 flex justify-between items-center animate-pulse">
+            <span>{{ $message }}</span>
+            <button wire:click="$set('message', '')" class="text-green-800 hover:text-green-900 font-bold text-lg leading-none">&times;</button>
         </div>
     @endif
 
@@ -53,7 +55,6 @@
         <div class="relative">
             <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 ml-1">Category</label>
             <div class="relative">
-                <!-- Ubah dari select menjadi input text -->
                 <input type="text" wire:model="category_name" placeholder="Type or select category..." list="category-list" class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-full pl-10 p-3 outline-none appearance-none cursor-text" required>
                 
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500 transition-colors">

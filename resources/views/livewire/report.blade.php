@@ -5,36 +5,47 @@
             <p class="text-xs text-slate-400">Income vs Expense Overview</p>
         </div>
         
-        <!-- Filter Buttons (Updated with Year) -->
+        <!-- Filter Buttons -->
         <div class="inline-flex bg-slate-100 dark:bg-slate-700 p-1 rounded-xl flex flex-wrap gap-1">
             <button wire:click="setFilter('today')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'today' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Today</button>
             <button wire:click="setFilter('week')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'week' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Week</button>
             <button wire:click="setFilter('month')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'month' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Month</button>
-            <!-- NEW BUTTON -->
             <button wire:click="setFilter('year')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'year' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">Year</button>
             <button wire:click="setFilter('all')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all {{ $filter === 'all' ? 'bg-white text-primary shadow-sm dark:bg-slate-600 dark:text-white dark:shadow-none' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">All</button>
         </div>
     </div>
 
     <div class="relative h-72 w-full">
-        <canvas id="financeChart"></canvas>
+        <!-- TAMBAHKAN DATA-ATTRIBUTES SUPAYA JS BISA BACA DATA BARU -->
+        <canvas id="reportChart" 
+            data-labels="{{ json_encode($this->chartData['labels']) }}"
+            data-income="{{ json_encode($this->chartData['income']) }}"
+            data-expense="{{ json_encode($this->chartData['expense']) }}"
+        ></canvas>
     </div>
 </div>
 
 @script
 <script>
     let chartInstance = null;
-    const labels = @js($chartData['labels']);
-    const incomeData = @js($chartData['income']);
-    const expenseData = @js($chartData['expense']);
 
-    function renderChart() {
-        const ctx = document.getElementById('financeChart').getContext('2d');
+    function renderReportChart() {
+        const canvas = document.getElementById('reportChart');
+        if (!canvas) return;
+
+        // BACA DATA DARI ATTRIBUTES (DINAMIS)
+        const labels = JSON.parse(canvas.dataset.labels || '[]');
+        const incomeData = JSON.parse(canvas.dataset.income || '[]');
+        const expenseData = JSON.parse(canvas.dataset.expense || '[]');
+
+        const ctx = canvas.getContext('2d');
         const isDark = document.documentElement.classList.contains('dark');
         const gridColor = isDark ? '#334155' : '#F1F5F9'; 
         const tickColor = isDark ? '#94A3B8' : '#64748B'; 
 
-        if (chartInstance) chartInstance.destroy();
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
 
         chartInstance = new Chart(ctx, {
             type: 'bar',
@@ -103,18 +114,17 @@
         });
     }
 
-    // Listen for Dark Mode toggle to update chart colors
-    window.addEventListener('toggle-theme', () => {
-        renderChart();
-    });
-    
-    // Override the toggleDarkMode from layout to dispatch an event
-    const originalToggle = window.toggleDarkMode;
-    window.toggleDarkMode = function() {
-        originalToggle();
-        window.dispatchEvent(new Event('toggle-theme'));
-    }
+    // 1. Render pertama kali
+    renderReportChart();
 
-    renderChart();
+    // 2. Render ulang pas ada update Livewire (Ganti Filter / Tambah Data)
+    document.addEventListener('livewire:updated', function() {
+        renderReportChart();
+    });
+
+    // 3. Render ulang pas Dark Mode berubah
+    window.addEventListener('darkModeChanged', function() {
+        renderReportChart();
+    });
 </script>
 @endscript

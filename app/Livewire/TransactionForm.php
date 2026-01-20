@@ -5,19 +5,28 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\Auth; // <--- TAMBAHKAN INI
+use Illuminate\Support\Facades\Auth;
 
 class TransactionForm extends Component
 {
+    // Variabel Form
     public $category_name;
     public $type = 'income';
     public $amount;
     public $date;
     public $note;
 
+    // Variabel Notifikasi
+    public $message = '';
+    
+    // Data Kategori buat Datalist
+    public $categories = [];
+
     public function mount(): void
     {
         $this->date = date('Y-m-d');
+        // Ambil SEMUA kategori (kita gak filter tipe lagi)
+        $this->categories = Category::all();
     }
 
     protected $rules = [
@@ -28,24 +37,33 @@ class TransactionForm extends Component
         'note' => 'nullable|string|max:255',
     ];
 
+    // KITA HAPUS updatedType() biar input gak ke-hapus pas ganti tipe
+    // Jadi lu bisa pilih kategori lama, trus ganti tipe transaksinya aja
+
     public function save()
     {
         $this->validate();
 
-        $category = Category::firstOrCreate(
-            [
-                'name' => trim($this->category_name),
-                'type' => $this->type,
-            ],
-            [
-                'name' => trim($this->category_name),
-                'type' => $this->type,
-            ]
-        );
+        // LOGIC BARU: Cari kategori berdasarkan NAMA SAJA (Tanpa lihat type)
+        $category = Category::where('name', trim($this->category_name))->first();
 
+        if ($category) {
+            // Kalau kategori ketemu, kita UPDATE tipenya sesuai form saat ini
+            // Jadi "Gaji" bisa berubah jadi Income atau Expense sesuai kebutuhan
+            if ($category->type !== $this->type) {
+                $category->update(['type' => $this->type]);
+            }
+        } else {
+            // Kalau gak ketemu sama sekali, baru bikin baru
+            $category = Category::create([
+                'name' => trim($this->category_name),
+                'type' => $this->type,
+            ]);
+        }
+
+        // Simpan Transaksi
         Transaction::create([
-            // GANTI auth()->id() MENJADI Auth::id()
-            'user_id' => Auth::id(), 
+            'user_id' => Auth::id(),
             'type' => $this->type,
             'category_id' => $category->id,
             'amount' => $this->amount,
@@ -53,16 +71,25 @@ class TransactionForm extends Component
             'note' => $this->note,
         ]);
 
-        $this->reset(['amount', 'note', 'category_name']);
+        // Reset Form Input
+        $this->reset(['amount', 'note']);
+        // $this->category_name GAK DI RESET, biar gak capek ngetik ulang kalau mau input berulang
+        // Tapi kalau mau direset, tinggal aktifin baris bawah:
+        // $this->reset('category_name'); 
+
         $this->date = date('Y-m-d');
 
-        $this->dispatch('transaction-updated');
+        // Dispatch event biar Dashboard update
+        $this->dispatch('refreshTransaction');
         
-        session()->flash('message', 'Transaksi berhasil disimpan.');
+        // Set pesan sukses
+        $this->message = 'Transaksi berhasil disimpan.';
     }
 
     public function render()
     {
+        // Ambil SEMUA kategori (biar user bisa pilih nama kategori yg sudah ada)
+        // Tipenya gak masalah, nanti pas save bakal diupdate otomatis
         $categories = Category::all();
 
         return view('livewire.transaction-form', [

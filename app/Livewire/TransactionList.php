@@ -2,16 +2,19 @@
 
 namespace App\Livewire;
 
-use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\Auth; // <--- TAMBAHKAN INI
+use Illuminate\Support\Facades\Auth;
 
 class TransactionList extends Component
 {
+    // --- PENTING: TAMBAHKAN INI ---
+    // Ini artinya: "Kalau dengar ada event 'refreshTransaction', lu harus RELOAD (render ulang)"
+    protected $listeners = ['refreshTransaction' => '$refresh'];
+
     public function render()
     {
-        // GANTI auth()->id() MENJADI Auth::id()
+        // Ambil transaksi user yang login, urutkan dari yang terbaru
         $transactions = Transaction::with('category')
                                    ->where('user_id', Auth::id()) 
                                    ->orderBy('date', 'desc')
@@ -24,18 +27,21 @@ class TransactionList extends Component
 
     public function delete($id)
     {
-        // Kita juga harus memastikan data yang dihapus milik user yang login
-        Transaction::where('id', $id)->where('user_id', Auth::id())->delete();
-        
-        $this->dispatch('transaction-updated');
+        // Cari data berdasarkan ID dan User ID (Keamanan)
+        $transaction = Transaction::where('id', $id)
+                                  ->where('user_id', Auth::id())
+                                  ->first();
+
+        if ($transaction) {
+            $transaction->delete();
+
+            // DISPATCH 'refreshTransaction'
+            // Ini buat ngasih tau ke Dashboard & Form & List sendiri (biar gak dobel update)
+            $this->dispatch('refreshTransaction');
+        }
     }
 
-    #[On('transaction-updated')]
-    public function refreshList()
-    {
-        // Livewire akan me-render ulang otomatis
-    }
-
+    // Helper fungsi buat icon
     public function getIcon($name)
     {
         $name = strtolower($name);
