@@ -4,161 +4,78 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Transaction;
-use App\Models\Category;
-use Livewire\Attributes\On;
-use Carbon\Carbon;
 
 class Dashboard extends Component
 {
-    // --- VARIABEL CHART & SUMMARY ---
     public $totalIncome = 0;
     public $totalExpense = 0;
     public $balance = 0;
-    public $transactions = [];
-    public $chartPeriod = 'year'; 
+    
+    // Variable untuk filter chart dari Select Box HTML Anda
+    public $chartPeriod = 'month'; 
+    
+    // Data untuk Chart
     public $chartLabels = [];
     public $incomeData = [];
     public $expenseData = [];
 
-    // --- VARIABEL FORM ---
-    public $type = 'income';
-    public $date;
-    public $amount;
-    public $category_id;
-    public $note;
-    public $categories = [];
-
-    public function mount()
+    public function mount(): void
     {
-        $this->date = date('Y-m-d');
-        $this->loadCategories();
-        $this->loadSummary(); 
+        $this->calculateStats();
+        $this->updateChartData();
     }
 
-    public function updatedType()
+    // Listener saat filter chart diubah
+    public function updatedChartPeriod(): void
     {
-        $this->category_id = null;
-        $this->loadCategories();
+        $this->calculateStats(); // Jika ingin statistik kartu juga berubah sesuai filter
+        // Atau jika kartu harus ALL TIME, jangan panggil calculateStats di sini.
+        // Untuk sekarang saya panggil updateChartData saja agar kartu tetap total.
+        $this->updateChartData();
     }
 
-    public function loadCategories()
+    private function calculateStats(): void
     {
-        $this->categories = Category::where('type', $this->type)->get();
-    }
-
-    #[On('transaction-updated')]
-    public function loadSummary()
-    {
-        // --- LOGIC SUMMARY (Tanpa Filter User) ---
+        // Hitung total keseluruhan (ALL TIME)
         $this->totalIncome = Transaction::where('type', 'income')->sum('amount');
         $this->totalExpense = Transaction::where('type', 'expense')->sum('amount');
-        
-        // Perhitungan Balance: Income - Expense
         $this->balance = $this->totalIncome - $this->totalExpense;
-
-        // List Transaksi (Ambil semua)
-        $this->transactions = Transaction::orderBy('date', 'desc')->limit(5)->get();
-
-        // --- LOGIC CHART ---
-        $this->updateChartData();
     }
 
-    public function updatedChartPeriod()
+    private function updateChartData(): void
     {
-        $this->updateChartData();
-    }
-
-    public function save()
-    {
-        $this->validate([
-            'date' => 'required',
-            'amount' => 'required|numeric',
-            'category_id' => 'required',
-        ]);
-
-        // SAVE DATA (Tanpa User ID)
-        Transaction::create([
-            'type' => $this->type,
-            'date' => $this->date,
-            'amount' => $this->amount,
-            'category_id' => $this->category_id,
-            'note' => $this->note,
-        ]);
-
-        $this->amount = '';
-        $this->note = '';
-        session()->flash('message', 'Transaction saved successfully!');
-        $this->loadSummary();
-        $this->dispatch('transaction-updated');
-    }
-
-    public function updateChartData()
-    {
-        // Query Chart (Ambil semua data)
-        $transactions = Transaction::query();
-        $startDate = null;
-        $endDate = null;
+        $query = Transaction::query();
 
         if ($this->chartPeriod == 'today') {
-            $startDate = Carbon::today()->startOfDay();
-            $endDate = Carbon::today()->endOfDay();
+            $query->whereDate('date', today());
         } elseif ($this->chartPeriod == 'month') {
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth();
+            $query->whereMonth('date', now()->month)->whereYear('date', now()->year);
         } elseif ($this->chartPeriod == 'last_month') {
-            $startDate = Carbon::now()->subMonth()->startOfMonth();
-            $endDate = Carbon::now()->subMonth()->endOfMonth();
+            $query->whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year);
         } elseif ($this->chartPeriod == 'year') {
-            $startDate = Carbon::now()->startOfYear();
-            $endDate = Carbon::now()->endOfYear();
+            $query->whereYear('date', now()->year);
         }
 
-        if ($startDate) {
-            $transactions->whereBetween('date', [$startDate, $endDate]);
-        }
+        $transactions = $query->orderBy('date')->get();
 
-        if ($this->chartPeriod == 'year') {
-            $data = $transactions->get()->groupBy(function($item) {
-                return Carbon::parse($item->date)->format('M'); 
-            });
-        } elseif ($this->chartPeriod == 'today') {
-            $data = $transactions->get()->groupBy(function($item) {
-                return Carbon::parse($item->date)->format('H:00'); 
-            });
-        } else {
-            $data = $transactions->get()->groupBy(function($item) {
-                return Carbon::parse($item->date)->format('d');
-            });
-        }
+        // Grouping untuk Chart (Group by Date)
+        $grouped = $transactions->groupBy(function($item) {
+            return \Carbon\Carbon::parse($item->date)->format('Y-m-d');
+        });
 
         $labels = [];
-        $incomes = [];
-        $expenses = [];
+        $incomeData = [];
+        $expenseData = [];
 
-        foreach ($data as $key => $trans) {
-            $labels[] = $key;
-            $incomes[] = $trans->where('type', 'income')->sum('amount');
-            $expenses[] = $trans->where('type', 'expense')->sum('amount');
+        foreach ($grouped as $date => $items) {
+            $labels[] = \Carbon\Carbon::parse($date)->format('M d');
+            $incomeData[] = $items->where('type', 'income')->sum('amount');
+            $expenseData[] = $items->where('type', 'expense')->sum('amount');
         }
 
         $this->chartLabels = $labels;
-        $this->incomeData = $incomes;
-        $this->expenseData = $expenses;
-    }
-
-    public function getIcon($categoryName)
-    {
-        return 'fa-tag';
-    }
-
-    public function delete($id)
-    {
-        // Hapus langsung tanpa cek user
-        $transaction = Transaction::find($id);
-        if($transaction) {
-            $transaction->delete();
-            $this->loadSummary();
-        }
+        $this->incomeData = $incomeData;
+        $this->expenseData = $expenseData;
     }
 
     public function render()

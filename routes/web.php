@@ -17,8 +17,8 @@ Route::view('/login', 'livewire.pages.auth.login')
 Route::view('/register', 'livewire.pages.auth.register')
     ->name('register');
 
-// 4. DASHBOARD (BUTUH LOGIN)
-Route::get('/dashboard', Dashboard::class)
+// 4. DASHBOARD (MENGGUNAKAN FILE BARU)
+Route::view('/dashboard', 'dashboard_standalone')
     ->middleware('auth')
     ->name('dashboard');
 
