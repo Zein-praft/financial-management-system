@@ -55,11 +55,13 @@
         .dark ::-webkit-scrollbar-thumb {
             background: #475569;
         }
+        input:focus ~ .input-icon { color: #6366F1; }
     </style>
-
+    
     @livewireStyles
     @stack('styles')
 </head>
+<body class="bg-slate-50 text-slate-700 antialiased min-h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200">
 
 <body
     class="bg-slate-50 text-slate-700 antialiased min-h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200 transition-colors duration-300">
@@ -185,9 +187,8 @@
             }
         });
     </script>
-
+    
     @livewireScripts
     @stack('scripts')
 </body>
-
 </html>

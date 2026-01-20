@@ -8,7 +8,7 @@
             </p>
         </div>
     </div>
-
+    
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -37,10 +37,8 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="h-10 w-10 flex-shrink-0">
-                                    <div
-                                        class="h-10 w-10 rounded-full {{ $iconBg }} {{ $darkIconBg }} flex items-center justify-center">
-                                        <i
-                                            class="fa-solid {{ $isIncome ? 'fa-arrow-down' : 'fa-arrow-up' }} text-xs"></i>
+                                    <div class="h-10 w-10 rounded-full {{ $iconBg }} {{ $darkIconBg }} flex items-center justify-center">
+                                        <i class="fa-solid {{ $isIncome ? 'fa-arrow-down' : 'fa-arrow-up' }} text-xs"></i>
                                     </div>
                                 </div>
                                 <div class="ml-4">

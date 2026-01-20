@@ -35,7 +35,7 @@ class Dashboard extends Component
         $this->updateChartData();
     }
 
-    public function updatedChartPeriod()
+    private function updateChartData(): void
     {
         Log::info("Dashboard: Filter diganti jadi: " . $this->chartPeriod);
         $this->updateChartData();
@@ -114,6 +114,35 @@ class Dashboard extends Component
             $this->incomeData = $incomeData;
             $this->expenseData = $expenseData;
         }
+            $query->whereDate('date', today());
+        } elseif ($this->chartPeriod == 'month') {
+            $query->whereMonth('date', now()->month)->whereYear('date', now()->year);
+        } elseif ($this->chartPeriod == 'last_month') {
+            $query->whereMonth('date', now()->subMonth()->month)->whereYear('date', now()->subMonth()->year);
+        } elseif ($this->chartPeriod == 'year') {
+            $query->whereYear('date', now()->year);
+        }
+
+        $transactions = $query->orderBy('date')->get();
+
+        // Grouping untuk Chart (Group by Date)
+        $grouped = $transactions->groupBy(function($item) {
+            return \Carbon\Carbon::parse($item->date)->format('Y-m-d');
+        });
+
+        $labels = [];
+        $incomeData = [];
+        $expenseData = [];
+
+        foreach ($grouped as $date => $items) {
+            $labels[] = \Carbon\Carbon::parse($date)->format('M d');
+            $incomeData[] = $items->where('type', 'income')->sum('amount');
+            $expenseData[] = $items->where('type', 'expense')->sum('amount');
+        }
+
+        $this->chartLabels = $labels;
+        $this->incomeData = $incomeData;
+        $this->expenseData = $expenseData;
     }
 
     public function render()
