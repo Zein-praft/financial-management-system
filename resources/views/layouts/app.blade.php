@@ -61,10 +61,8 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="bg-slate-50 text-slate-700 antialiased min-h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200">
 
-<body
-    class="bg-slate-50 text-slate-700 antialiased min-h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200 transition-colors duration-300">
+<body class="bg-slate-50 text-slate-700 antialiased min-h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200 transition-colors duration-300">
 
     <!-- NAVBAR -->
     <nav
@@ -142,7 +140,6 @@
 
     <!-- TEMPAT KONTEN DINAMIS -->
     {{ $slot }}
-    <!-- ATAU @yield('content') kalau bukan full-page component -->
 
     <script>
         // --- DARK MODE GLOBAL ---
@@ -185,6 +182,11 @@
             if (!dropdown.contains(e.target) && !e.target.closest('button')) {
                 if (!dropdown.classList.contains('hidden')) toggleDropdown();
             }
+        });
+
+        // --- Emit event untuk Livewire saat dark mode berubah ---
+        window.addEventListener('darkModeChanged', () => {
+            window.dispatchEvent(new CustomEvent('toggle-theme'));
         });
     </script>
     

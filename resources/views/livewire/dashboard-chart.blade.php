@@ -28,11 +28,16 @@
 @script
 <script>
     let chartInstance = null;
-    
-    // 1. Initial Load
+
     const initChart = () => {
         const canvas = document.getElementById('financeChart');
         if (!canvas) return;
+
+        // ✅ Ambil data dari Livewire property
+        const data = $wire.chartData;
+        const labels = data.labels || [];
+        const income = data.income || [];
+        const expense = data.expense || [];
 
         const ctx = canvas.getContext('2d');
         const isDark = document.documentElement.classList.contains('dark');
@@ -46,11 +51,11 @@
         chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: $labels,
+                labels: labels,
                 datasets: [
                     {
                         label: 'Income',
-                        data: $income,
+                        data: income,
                         backgroundColor: '#3B82F6',
                         borderColor: '#3B82F6',
                         borderWidth: 1,
@@ -59,7 +64,7 @@
                     },
                     {
                         label: 'Expense',
-                        data: $expense,
+                        data: expense,
                         backgroundColor: '#F87171',
                         borderColor: '#F87171',
                         borderWidth: 1,
@@ -104,17 +109,17 @@
         });
     };
 
-    // 2. Update saat Livewire update data dari PHP
-    $watch('chartData', () => {
+    // ✅ Reaktif terhadap perubahan $chartData
+    $watch(() => $wire.chartData, () => {
         initChart();
     });
 
-    // 3. Update saat Dark Mode Toggle
+    // Update saat dark mode berubah
     window.addEventListener('toggle-theme', () => {
         if (chartInstance) initChart();
     });
 
-    // Panggil pertama kali
+    // Inisialisasi awal
     initChart();
 </script>
 @endscript
