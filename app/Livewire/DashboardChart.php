@@ -21,12 +21,12 @@ class DashboardChart extends Component
     #[On('transaction-updated')]
     public function updateChartData(): void
     {
-        $this->updateChartData();
+        $this->refreshChartData();
     }
 
     // --------------------------
 
-    private function updateChartData(): void
+    private function refreshChartData(): void
     {
         $period = $this->chartPeriod; // Mengambil nilai select box Livewire
         
