@@ -20,9 +20,18 @@ class DashboardChart extends Component
     #[On('transaction-updated')]
     public function updateChartData(): void
     {
-        $period = request()->input('chartPeriod', 'month');
-        $query = Transaction::where('user_id', \Illuminate\Support\Facades\Auth::id()); // Filter User
+        $this->refreshChartData();
+    }
 
+    // --------------------------
+
+    private function refreshChartData(): void
+    {
+        $period = $this->chartPeriod; // Mengambil nilai select box Livewire
+        
+        $query = Transaction::where('user_id', \Illuminate\Support\Facades\Auth::id());
+
+        // Logika Filter Waktu
         if ($period == 'today') {
             $query->whereDate('date', \Carbon\Carbon::today());
         } elseif ($period == 'last_month') {
