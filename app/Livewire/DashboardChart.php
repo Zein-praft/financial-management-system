@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use Livewire\Attributes\On; // <--- PASTIKAN USE INI
+use Livewire\Attributes\On; // Listener Event
 use Livewire\Component;
 use App\Models\Transaction;
 
@@ -16,8 +16,7 @@ class DashboardChart extends Component
         $this->updateChartData();
     }
 
-    // <--- TAMBAHKAN LISTENER INI ---
-    // Saat ada transaksi baru, fungsi ini otomatis jalan
+    // LISTENER: Saat ada transaksi baru/hapus, ini otomatis jalan
     #[On('transaction-updated')]
     public function updateChartData(): void
     {
@@ -41,14 +40,13 @@ class DashboardChart extends Component
         } elseif ($period == 'year') {
             $query->whereYear('date', \Carbon\Carbon::now()->year);
         } else {
-            // Default Month (Ini biasa yang aktif)
             $query->whereMonth('date', \Carbon\Carbon::now()->month)
                    ->whereYear('date', \Carbon\Carbon::now()->year);
         }
 
         $transactions = $query->orderBy('date', 'asc')->get();
 
-        // Grouping
+        // Grouping untuk Chart
         $grouped = $transactions->groupBy(function($item) {
             return \Carbon\Carbon::parse($item->date)->format('Y-m-d');
         });
