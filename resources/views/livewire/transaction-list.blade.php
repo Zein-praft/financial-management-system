@@ -1,19 +1,35 @@
 <div
-    class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
+    class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col">
+
+    <!-- HEADER (Sudah ditambahin Tombol Tampilkan Semua) -->
     <div
-        class="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-700/30">
+        class="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-700/30 flex-shrink-0">
+
+        <!-- Kiri: Judul & Count -->
         <div>
             <h2 class="text-lg font-bold text-slate-800 dark:text-white">Transaction History</h2>
             <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{{ $transactions->count() }} transactions found
             </p>
         </div>
+
+        <!-- Kanan: TOMBOL TAMPILKAN SEMUA -->
+        <!-- Dispatch event ke dashboard.blade.php buat buka modal -->
+        <button @click="$dispatch('open-history-modal')"
+            class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-primary dark:hover:border-primary transition-all shadow-sm">
+            <i class="fa-solid fa-list-ul"></i>
+            <span>Tampilkan Semua</span>
+        </button>
     </div>
-    
-    <div class="overflow-x-auto">
+
+    <!-- TABEL DENGAN SCROLL (LIMIT TINGGI 5 BARIS) -->
+    <!-- max-h-[400px] mengatur tinggi scroll -->
+    <!-- overflow-auto mengaktifkan scroll vertikal -->
+    <div class="overflow-auto max-h-[400px] relative">
         <table class="w-full text-left border-collapse">
             <thead>
+                <!-- sticky top-0 biar header tetap terlihat pas scroll -->
                 <tr
-                    class="text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
+                    class="sticky top-0 z-10 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700 bg-slate-50/95 dark:bg-slate-700/95 shadow-sm">
                     <th class="px-6 py-4">Transaction</th>
                     <th class="px-6 py-4">Category</th>
                     <th class="px-6 py-4">Date</th>
@@ -37,8 +53,10 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="h-10 w-10 flex-shrink-0">
-                                    <div class="h-10 w-10 rounded-full {{ $iconBg }} {{ $darkIconBg }} flex items-center justify-center">
-                                        <i class="fa-solid {{ $isIncome ? 'fa-arrow-down' : 'fa-arrow-up' }} text-xs"></i>
+                                    <div
+                                        class="h-10 w-10 rounded-full {{ $iconBg }} {{ $darkIconBg }} flex items-center justify-center">
+                                        <i
+                                            class="fa-solid {{ $isIncome ? 'fa-arrow-down' : 'fa-arrow-up' }} text-xs"></i>
                                     </div>
                                 </div>
                                 <div class="ml-4">
