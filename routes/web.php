@@ -28,4 +28,3 @@ Route::view('/profile', 'profile')
 
 // Require file auth bawaan breeze (forgot password, dll)
 require __DIR__.'/auth.php';
-
