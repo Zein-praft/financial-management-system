@@ -108,20 +108,14 @@
         <!-- Hero Section -->
         <section class="py-20 text-center px-4">
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-cyan-500">
-                Dokumentasi Fitur Fintrack
+                Kelola Keuangan Anda dengan Mudah bersama Fintrack
             </h1>
-            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Penjelasan detail fungsi dan tampilan antarmuka berdasarkan data riil yang tercatat dalam sistem.
-            </p>
+                <h2 class="text-3xl font-bold mb-4">Fitur Unggulan & Kegunaan</h2>
+                <p class="text-gray-600 dark:text-gray-400">Temukan bagaimana Fintrack membantu mengoptimalkan operasional bisnis Anda.</p>
         </section>
 
         <!-- Portfolio / Showcase Grid -->
         <section class="container mx-auto px-4 pb-20">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4">Fitur Unggulan & Kegunaan</h2>
-                <p class="text-gray-600 dark:text-gray-400">Temukan bagaimana Fintrack membantu mengoptimalkan operasional bisnis Anda.</p>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
                 <!-- Card 1: Monitoring Saldo (Data: 110k, 165k, -55k) -->
@@ -716,7 +710,7 @@
                         <i class="ph ph-github-logo ph-fill"></i>
                         <span>Open Source · Contributors</span>
                     </div>
-                    <a href="https://github.com/financial-management-system" target="_blank" class="github-repo-link">
+                    <a href="https://github.com/Zein-praft/financial-management-system" target="_blank" class="github-repo-link">
                         <i class="ph ph-code"></i> Fintrack Repository
                         <i class="ph ph-arrow-up-right"></i>
                     </a>
