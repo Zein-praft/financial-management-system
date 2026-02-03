@@ -823,6 +823,8 @@
                             <div class="github-handle"><i class="ph ph-github-logo"></i> @Favianevn</div>
                         </div>
                     </a>
+
+                    <!-- Card 3 -->
                     <a href="https://github.com/jordanbob" target="_blank" class="github-card">
                         <div class="github-avatar"><img src="https://github.com/jordanbob.png" alt="Avatar"></div>
                         <div class="github-info">
