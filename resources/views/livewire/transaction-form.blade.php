@@ -1,131 +1,130 @@
-<!-- Gw kurangin timeout jadi 50ms biar lebih responsif -->
-<!-- Dan ganti target scroll ke element dashboard-cards -->
-<div x-data="{ showHistory: false }" 
-     @open-history-modal.window="showHistory = true" 
-     @refreshTransaction.window="setTimeout(() => document.getElementById('dashboard-cards').scrollIntoView({behavior: 'smooth'}), 50)"
-     x-cloak>
+<div class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-xl border border-slate-100 dark:border-white/5 p-6">
+    <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
+        <i class="fa-solid fa-circle-plus text-blue-500"></i> Add Transaction
+    </h2>
 
-    <!-- MAIN CONTENT WRAPPER -->
-    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+    {{-- NOTIFIKASI SUKSES --}}
+    @if ($message)
+        <div
+            class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm border border-green-200 dark:border-green-800 flex justify-between items-center animate-pulse">
+            <span>{{ $message }}</span>
+            <button wire:click="$set('message', '')"
+                class="text-green-800 dark:text-green-600 hover:text-green-900 dark:hover:text-green-500 font-bold text-lg leading-none">&times;</button>
+        </div>
+    @endif
 
-        <!-- ROW 1: CARDS SUMMARY -->
-        <!-- TAMBAHIN id="dashboard-cards" DI SINI ↓↓↓ -->
-        <div id="dashboard-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <form wire:submit="save" class="space-y-5">
 
-            <!-- INCOME CARD -->
-            <div
-                class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+        <!-- Type Toggle (Clean Style) -->
+        <div class="grid grid-cols-2 gap-3 p-1 bg-slate-100 dark:bg-slate-700 rounded-xl">
+            <label class="cursor-pointer relative">
+                <input type="radio" name="type" wire:model="type" value="income" class="peer sr-only">
                 <div
-                    class="absolute right-0 top-0 w-24 h-24 bg-emerald-50 dark:bg-emerald-900/20 rounded-bl-full -mr-4 -mt-4 group-hover:scale-110 transition">
+                    class="text-center py-2 rounded-lg text-sm font-medium transition-all peer-checked:bg-white peer-checked:text-emerald-600 peer-checked:shadow-sm dark:peer-checked:bg-slate-600 dark:peer-checked:text-emerald-400">
+                    Income
                 </div>
-                <div class="relative z-10">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div
-                            class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                            <i class="fa-solid fa-arrow-down"></i>
-                        </div>
-                        <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Income</span>
-                    </div>
-                    <h3 class="text-3xl font-bold text-slate-800 dark:text-white">
-                        Rp {{ number_format($this->totalIncome ?? 0, 0, ',', '.') }}
-                    </h3>
-                </div>
-            </div>
-
-            <!-- EXPENSE CARD -->
-            <div
-                class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
                 <div
-                    class="absolute right-0 top-0 w-24 h-24 bg-red-50 dark:bg-red-900/20 rounded-bl-full -mr-4 -mt-4 group-hover:scale-110 transition">
+                    class="absolute inset-0 ring-1 ring-inset ring-slate-900/10 dark:ring-slate-600 rounded-lg peer-checked:ring-emerald-500 dark:peer-checked:ring-emerald-400">
                 </div>
-                <div class="relative z-10">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div
-                            class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 flex items-center justify-center">
-                            <i class="fa-solid fa-arrow-up"></i>
-                        </div>
-                        <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Expense</span>
-                    </div>
-                    <h3 class="text-3xl font-bold text-slate-800 dark:text-white">
-                        Rp {{ number_format($this->totalExpense ?? 0, 0, ',', '.') }}
-                    </h3>
+            </label>
+            <label class="cursor-pointer relative">
+                <input type="radio" name="type" wire:model="type" value="expense" class="peer sr-only">
+                <div
+                    class="text-center py-2 rounded-lg text-sm font-medium transition-all peer-checked:bg-white peer-checked:text-red-500 peer-checked:shadow-sm dark:peer-checked:bg-slate-600 dark:peer-checked:text-red-400">
+                    Expense
                 </div>
-            </div>
+                <div
+                    class="absolute inset-0 ring-1 ring-inset ring-slate-900/10 dark:ring-slate-600 rounded-lg peer-checked:ring-red-500 dark:peer-checked:ring-red-400">
+                </div>
+            </label>
+        </div>
 
-            <!-- BALANCE CARD -->
+        <!-- Date (Premium Input Style) -->
+        <div class="space-y-2">
+            <label
+                class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Date</label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i
+                        class="fa-regular fa-calendar text-slate-400 group-focus-within:text-blue-500 transition-colors duration-300"></i>
+                </div>
+                <input type="date" wire:model="date"
+                    class="w-full bg-white/50 dark:bg-slate-800/50 border border-blue-100 dark:border-slate-700 text-slate-800 dark:text-white text-sm rounded-2xl focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 font-body pl-11 pr-4 py-4"
+                    required>
+            </div>
+        </div>
+
+        <!-- Amount (Premium Input Style) -->
+        <div class="space-y-2">
+            <label
+                class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Amount</label>
+            <div class="relative group">
+                <div
+                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 dark:text-slate-400 font-bold text-sm">
+                    Rp
+                </div>
+                <input type="number" wire:model="amount" step="0.01" min="0" placeholder="0.00"
+                    class="w-full bg-white/50 dark:bg-slate-800/50 border border-blue-100 dark:border-slate-700 text-slate-800 dark:text-white text-sm rounded-2xl focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 font-body font-medium pl-12 pr-4 py-4"
+                    required>
+                @error('amount')
+                    <span class="text-xs text-red-500 mt-1 ml-1 flex items-center gap-1"><i
+                            class="fa-solid fa-triangle-exclamation"></i> {{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        <!-- Category (Premium Input Style) -->
+        <div class="space-y-2">
+            <label
+                class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Category</label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i
+                        class="fa-solid fa-tag text-slate-400 group-focus-within:text-blue-500 transition-colors duration-300"></i>
+                </div>
+                <input type="text" wire:model="category_name" placeholder="Type or select category..."
+                    list="category-list"
+                    class="w-full bg-white/50 dark:bg-slate-800/50 border border-blue-100 dark:border-slate-700 text-slate-800 dark:text-white text-sm rounded-2xl focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 font-body pl-11 pr-4 py-4 appearance-none cursor-text"
+                    required>
+
+                <!-- Datalist -->
+                <datalist id="category-list">
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->name }}">
+                    @endforeach
+                </datalist>
+            </div>
+            @error('category_name')
+                <span class="text-xs text-red-500 mt-1 ml-1 flex items-center gap-1"><i
+                        class="fa-solid fa-triangle-exclamation"></i> {{ $message }}</span>
+            @enderror
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">* Type a new category or select from list.</p>
+        </div>
+
+        <!-- Note (Premium Input Style) -->
+        <div class="space-y-2">
+            <label
+                class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Note</label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i
+                        class="fa-regular fa-pen-to-square text-slate-400 group-focus-within:text-blue-500 transition-colors duration-300"></i>
+                </div>
+                <input type="text" wire:model="note" placeholder="Short description..."
+                    class="w-full bg-white/50 dark:bg-slate-800/50 border border-blue-100 dark:border-slate-700 text-slate-800 dark:text-white text-sm rounded-2xl focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 font-body pl-11 pr-4 py-4">
+            </div>
+        </div>
+
+        <!-- Button Save (Premium Gradient) -->
+        <button type="submit"
+            class="group relative overflow-hidden w-full bg-gradient-to-r from-blue-400 to-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:scale-95 transition-all duration-300 mt-2">
+            <span class="relative z-10 flex items-center justify-center gap-2 text-lg">
+                Save Transaction
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </span>
             <div
-                class="bg-gradient-to-br from-blue-400 to-blue-600 p-6 rounded-2xl shadow-lg text-white relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
-                <div class="absolute right-0 bottom-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mb-10"></div>
-                <div class="relative z-10">
-                    <div class="flex items-center gap-2 mb-2 opacity-90">
-                        <div class="w-8 h-8 rounded-lg bg-white/20 text-white flex items-center justify-center">
-                            <i class="fa-solid fa-wallet"></i>
-                        </div>
-                        <span class="text-sm font-medium">Current Balance</span>
-                    </div>
-                    <h3 class="text-3xl font-bold">
-                        Rp {{ number_format($this->balance ?? 0, 0, ',', '.') }}
-                    </h3>
-                </div>
+                class="absolute inset-0 h-full w-full scale-0 rounded-2xl transition-transform duration-300 group-hover:scale-100 group-hover:bg-white/20">
             </div>
-
-        </div>
-
-        <!-- MAIN GRID (CHART & FORM) -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            <!-- LEFT: CHART & LIST (Lebar 2/3) -->
-            <div class="lg:col-span-2 space-y-8">
-
-                {{-- <!-- CHART COMPONENT (Panggil Livewire Terpisah) -->
-                <livewire:finance-chart /> --}}
-
-                <!-- TRANSACTION LIST -->
-                <livewire:transaction-list />
-            </div>
-
-            <!-- RIGHT: FORM (Lebar 1/3) -->
-            <div class="lg:col-span-1">
-                <div class="sticky top-24">
-                    <livewire:transaction-form />
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- MODAL HISTORY TRANSACTION -->
-    <!-- Gw ubah jadi z-[60] biar dijamin di atas navbar/sidebar -->
-    <div x-show="showHistory" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4"
-        @keydown.escape.window="showHistory = false" @click.self="showHistory = false">
-
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden relative"
-            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" @click.stop>
-
-            <!-- Modal Header -->
-            <div
-                class="flex justify-between items-center p-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/30">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Transaction History</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Search detailed financial records</p>
-                </div>
-                <!-- Tombol Close -->
-                <button @click="showHistory = false"
-                    class="w-10 h-10 rounded-xl bg-white dark:bg-slate-600 text-slate-500 dark:text-slate-200 hover:text-red-500 dark:hover:text-red-400 border border-slate-200 dark:border-slate-500 flex items-center justify-center transition-colors shadow-sm">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <!-- Modal Body: Panggil Komponen TransactionHistory -->
-            <div class="overflow-y-auto flex-1 p-0 bg-white dark:bg-slate-800">
-                @livewire('transaction-history')
-            </div>
-        </div>
-    </div>
-
-</div> <!-- Penutup div x-data Alpine -->
+        </button>
+    </form>
+</div>
