@@ -22,27 +22,22 @@ class Dashboard extends Component
     public $expenseData = [];
 
     protected $listeners = [
-        'refreshTransaction' => 'refreshStats'
+        'refreshTransaction' => 'reloadData'
     ];
 
     public function mount()
     {
-        $this->loadAll();
+        // ❗ JALAN SEKALI SAAT PERTAMA MASUK
+        $this->reloadData();
     }
 
     public function updatedChartPeriod()
     {
-        $this->loadAll();
-        $this->dispatch('refreshChart');
+        // ❗ JANGAN DISPATCH EVENT DI SINI
+        $this->reloadData();
     }
 
-    public function refreshStats()
-    {
-        $this->loadAll();
-        $this->dispatch('refreshChart');
-    }
-
-    private function loadAll()
+    public function reloadData()
     {
         $this->calculateStats();
         $this->loadChartData();
@@ -52,11 +47,15 @@ class Dashboard extends Component
     {
         $userId = Auth::id();
 
-        $this->totalIncome = Transaction::where('user_id', $userId)
+        if (!$userId) return;
+
+        $transactions = Transaction::where('user_id', $userId)->get();
+
+        $this->totalIncome = $transactions
             ->where('type', 'income')
             ->sum('amount');
 
-        $this->totalExpense = Transaction::where('user_id', $userId)
+        $this->totalExpense = $transactions
             ->where('type', 'expense')
             ->sum('amount');
 
@@ -67,18 +66,28 @@ class Dashboard extends Component
     {
         $userId = Auth::id();
 
+        if (!$userId) return;
+
         $query = Transaction::where('user_id', $userId);
 
-        if ($this->chartPeriod === 'today') {
-            $query->whereDate('date', now());
-        } elseif ($this->chartPeriod === 'month') {
-            $query->whereMonth('date', now()->month)
-                  ->whereYear('date', now()->year);
-        } elseif ($this->chartPeriod === 'last_month') {
-            $query->whereMonth('date', now()->subMonth()->month)
-                  ->whereYear('date', now()->subMonth()->year);
-        } elseif ($this->chartPeriod === 'year') {
-            $query->whereYear('date', now()->year);
+        switch ($this->chartPeriod) {
+            case 'today':
+                $query->whereDate('date', today());
+                break;
+
+            case 'month':
+                $query->whereMonth('date', now()->month)
+                      ->whereYear('date', now()->year);
+                break;
+
+            case 'last_month':
+                $query->whereMonth('date', now()->subMonth()->month)
+                      ->whereYear('date', now()->subMonth()->year);
+                break;
+
+            case 'year':
+                $query->whereYear('date', now()->year);
+                break;
         }
 
         $data = $query
@@ -89,9 +98,9 @@ class Dashboard extends Component
             ->orderBy('label')
             ->get();
 
-        $this->chartLabels = $data->pluck('label');
-        $this->incomeData  = $data->pluck('income');
-        $this->expenseData = $data->pluck('expense');
+        $this->chartLabels = $data->pluck('label')->toArray();
+        $this->incomeData  = $data->pluck('income')->toArray();
+        $this->expenseData = $data->pluck('expense')->toArray();
     }
 
     public function render()

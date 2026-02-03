@@ -8,61 +8,89 @@ use Livewire\Component;
 
 class TransactionHistory extends Component
 {
-    // Array untuk menyimpan nilai filter input
-    public $filters = [
-        'date'  => '',
-        'month' => '',
-        'year'  => '',
-    ];
+// Array untuk menyimpan nilai filter input
+public $filters = [
+'date' => '',
+'month' => '',
+'year' => '',
+];
 
-    /**
-     * Computed Property: Mengambil data transaksi berdasarkan filter.
-     */
-    public function getTransactionsProperty()
-    {
-        $query = Transaction::query()->where('user_id', Auth::id()); // Pastikan filter by user login
+/**
+* Computed Property: Mengambil data transaksi berdasarkan filter.
+*/
+public function getTransactionsProperty()
+{
+// Load relasi 'category' biar gak error pas dipanggil di blade ($t->category->name)
+$query = Transaction::where('user_id', Auth::id())
+->with('category')
+->orderBy('date', 'desc');
 
-        if (!empty($this->filters['date'])) {
-            $query->whereDate('date', $this->filters['date']);
-        }
+// Filter Specific Date
+if (!empty($this->filters['date'])) {
+$query->whereDate('date', $this->filters['date']);
+}
 
-        // Filter Month (pastikan input value 0-11)
-        if ($this->filters['month'] !== '') {
-            $query->whereMonth('date', $this->filters['month']);
-        }
+// Filter Month
+if ($this->filters['month'] !== '') {
+$query->whereMonth('date', $this->filters['month']);
+}
 
-        if (!empty($this->filters['year'])) {
-            $query->whereYear('date', $this->filters['year']);
-        }
+// Filter Year
+if (!empty($this->filters['year'])) {
+$query->whereYear('date', $this->filters['year']);
+}
 
-        return $query->orderBy('date', 'desc')->get();
-    }
+return $query->get();
+}
 
-    /**
-     * Computed Property: Total Income & Expense
-     */
-    public function getTotalsProperty()
-    {
-        $transactions = $this->transactions;
+/**
+* Computed Property: Total Income & Expense
+* Mengambil data dari $this->transactions yang sudah difilter
+*/
+public function getTotalsProperty()
+{
+$transactions = $this->transactions;
 
-        return [
-            'income'  => $transactions->where('type', 'income')->sum('amount'),
-            'expense' => $transactions->where('type', 'expense')->sum('amount'),
-        ];
-    }
+return [
+'income' => $transactions->where('type', 'income')->sum('amount'),
+'expense' => $transactions->where('type', 'expense')->sum('amount'),
+];
+}
 
-    public function resetFilters()
-    {
-        $this->reset('filters');
-    }
+/**
+* Method Tombol Apply Filter
+*/
+public function applyFilters()
+{
+// Kita return saja, Livewire akan merender ulang
+// dan property $this->transactions akan terupdate otomatis
+// berdasarkan nilai $filters terbaru.
+return;
+}
 
-    public function delete($id)
-    {
-        Transaction::find($id)->delete();
-    }
+/**
+* Method Reset Filter
+*/
+public function resetFilters()
+{
+$this->reset('filters');
+}
 
-    public function render()
-    {
-        return view('livewire.transaction-history');
-    }
+/**
+* Method Hapus Transaksi (Sudah ditambah keamanan user check)
+*/
+public function delete($id)
+{
+// Cari transaksi yang milik user login saja
+$transaction = Transaction::where('user_id', Auth::id())->find($id);
+
+if ($transaction) {
+$transaction->delete();
+}
+}
+
+public function render()
+{
+return view('livewire.transaction-history');
+}
 }
