@@ -742,7 +742,7 @@
                             <div class="github-handle"><i class="ph ph-github-logo"></i> @Favianevn</div>
                         </div>
                     </a>
-{{-- 
+
                     <!-- Card 3 -->
                     <a href="https://github.com/jordanbob" target="_blank" class="github-card">
                         <div class="github-avatar">
@@ -753,7 +753,7 @@
                             <div class="github-role">UI/UX Designer</div>
                             <div class="github-handle"><i class="ph ph-github-logo"></i> @jordanbob</div>
                         </div>
-                    </a> --}}
+                    </a>
                 </div>
             </div>
 
