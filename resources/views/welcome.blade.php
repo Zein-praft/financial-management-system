@@ -112,14 +112,14 @@
                     </button>
 
                     <!-- TOMBOL LOGIN (FIXED: Route Login) -->
-                    <a href="{{ route('login') }}"
+                    {{-- <a href="{{ route('login') }}"
                         class="hidden sm:flex items-center gap-2 group relative overflow-hidden bg-gradient-to-r from-blue-400 to-indigo-600 text-white text-sm font-semibold py-2 px-5 rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:scale-95 transition-all duration-300">
                         <span class="relative z-10">Login</span>
                         <div
                             class="absolute inset-0 h-full w-full scale-0 rounded-2xl transition-all duration-300 group-hover:scale-100 group-hover:bg-white/20">
                         </div>
                         <i class="ph ph-sign-in text-lg relative z-10"></i>
-                    </a>
+                    </a> --}}
 
                     <!-- Mobile Menu Button -->
                     <button class="sm:hidden p-2 text-gray-600 dark:text-gray-300">
@@ -825,12 +825,12 @@
                     </a>
 
                     <!-- Card 3 -->
-                    <a href="https://github.com/jordanbob" target="_blank" class="github-card">
-                        <div class="github-avatar"><img src="https://github.com/jordanbob.png" alt="Avatar"></div>
+                    <a href="https://github.com/nwisnuyasa4-afk" target="_blank" class="github-card">
+                        <div class="github-avatar"><img src="https://github.com/nwisnuyasa4-afk.png" alt="Avatar"></div>
                         <div class="github-info">
-                            <div class="github-name">Jordan Bob</div>
-                            <div class="github-role">UI/UX Designer</div>
-                            <div class="github-handle"><i class="ph ph-github-logo"></i> @jordanbob</div>
+                            <div class="github-name">Nazril</div>
+                            <div class="github-role">QA (Quality Assurance)</div>
+                            <div class="github-handle"><i class="ph ph-github-logo"></i> @nwisnuyasa4-afk</div>
                         </div>
                     </a>
                 </div>
