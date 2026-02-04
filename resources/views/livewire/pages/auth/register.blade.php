@@ -45,7 +45,7 @@
         }
     </style>
 
-    <div class="min-h-screen flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    {{-- <div class="min-h-screen flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden"> --}}
 
         <!-- Background Decorations -->
         <div
@@ -257,7 +257,7 @@
 
             </div>
         </div>
-    </div>
+    {{-- </div> --}}
 
     <!-- SCRIPT TOGGLE MODE -->
     <script>
