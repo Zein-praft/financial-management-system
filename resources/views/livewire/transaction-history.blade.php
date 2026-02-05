@@ -42,7 +42,7 @@
                 <!-- BODY -->
                 <div class="p-8">
 
-                    <!-- FILTER SECTION (STYLE LOGIN + TOMBOL APPLY) -->
+                    <!-- FILTER SECTION -->
                     <div
                         class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-[2.5rem] p-8 mb-8 relative overflow-hidden shadow-sm">
                         {{-- Dekorasi Garis Biru --}}
@@ -50,9 +50,10 @@
                             class="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600 rounded-l-[2.5rem]">
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {{-- UPDATE GRID: Dari 3 kolom jadi 4 kolom biar muat filter Type --}}
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                            <!-- Specific Date -->
+                            <!-- 1. Specific Date -->
                             <div class="space-y-2">
                                 <label
                                     class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Specific
@@ -67,7 +68,7 @@
                                 </div>
                             </div>
 
-                            <!-- Month -->
+                            <!-- 2. Month -->
                             <div class="space-y-2">
                                 <label
                                     class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Month</label>
@@ -91,7 +92,7 @@
                                 </div>
                             </div>
 
-                            <!-- Year -->
+                            <!-- 3. Year -->
                             <div class="space-y-2">
                                 <label
                                     class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Year</label>
@@ -104,6 +105,29 @@
                                         class="w-full pl-11 pr-4 py-4 rounded-2xl border border-blue-100 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 text-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 font-body">
                                 </div>
                             </div>
+
+                            <!-- 4. TAMBAHAN: Transaction Type (Income/Expense) -->
+                            <div class="space-y-2">
+                                <label
+                                    class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ml-1">Type</label>
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <i
+                                            class="fa-solid fa-filter text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                                    </div>
+                                    <div
+                                        class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400">
+                                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                                    </div>
+                                    <select wire:model.defer="filters.type"
+                                        class="w-full pl-11 pr-10 py-4 rounded-2xl border border-blue-100 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 text-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 font-body appearance-none cursor-pointer">
+                                        <option value="">All Types</option>
+                                        <option value="income">Income (Masuk)</option>
+                                        <option value="expense">Expense (Keluar)</option>
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div
@@ -120,7 +144,7 @@
                                     <i class="fa-solid fa-rotate-right"></i> Reset Filters
                                 </button>
 
-                                {{-- TOMBOL APPLY FILTER (UPDATED LOADING UX) --}}
+                                {{-- TOMBOL APPLY FILTER --}}
                                 <button wire:click="applyFilters" wire:loading.attr="disabled"
                                     class="group relative overflow-hidden bg-gradient-to-r from-blue-400 to-indigo-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 font-heading flex items-center gap-2 text-sm">
                                     <span class="relative z-10" wire:loading.remove>Apply Filter</span>
@@ -206,7 +230,8 @@
                                             <td class="px-6 py-4">
                                                 <span
                                                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
-                                                    <i class="fa-solid fa-tag text-[10px]"></i> {{ $t->category->name }}
+                                                    <i class="fa-solid fa-tag text-[10px]"></i>
+                                                    {{ $t->category->name }}
                                                 </span>
                                             </td>
                                             <td
