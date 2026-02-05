@@ -43,36 +43,26 @@
     <!-- Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- CSS Khusus untuk Scrollbar & Transisi (Sedikit yang diperlukan) -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-
         ::-webkit-scrollbar-track {
             background: transparent;
         }
-
         ::-webkit-scrollbar-thumb {
             background-color: #cbd5e1;
             border-radius: 20px;
         }
-
         .dark ::-webkit-scrollbar-thumb {
             background-color: #334155;
         }
-
         body {
             transition: background-color 0s, color 0s;
-        }
-
-        /* Efek hover smooth */
-        .transition-interactive {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
@@ -89,7 +79,6 @@
                 <div class="flex items-center gap-2 cursor-pointer group">
                     <div
                         class="bg-gradient-to-br from-blue-400 to-indigo-600 text-white p-1.5 rounded-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                        <!-- Diubah jadi ph-fill biar solid -->
                         <i class="ph-fill ph-wallet text-xl"></i>
                     </div>
                     <span
@@ -110,16 +99,6 @@
                         <i id="theme-icon-dark" class="ph ph-moon text-xl hidden"></i>
                         <i id="theme-icon-light" class="ph ph-sun text-xl"></i>
                     </button>
-
-                    <!-- TOMBOL LOGIN (FIXED: Route Login) -->
-                    {{-- <a href="{{ route('login') }}"
-                        class="hidden sm:flex items-center gap-2 group relative overflow-hidden bg-gradient-to-r from-blue-400 to-indigo-600 text-white text-sm font-semibold py-2 px-5 rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 active:scale-95 transition-all duration-300">
-                        <span class="relative z-10">Login</span>
-                        <div
-                            class="absolute inset-0 h-full w-full scale-0 rounded-2xl transition-all duration-300 group-hover:scale-100 group-hover:bg-white/20">
-                        </div>
-                        <i class="ph ph-sign-in text-lg relative z-10"></i>
-                    </a> --}}
 
                     <!-- Mobile Menu Button -->
                     <button class="sm:hidden p-2 text-gray-600 dark:text-gray-300">
@@ -356,492 +335,134 @@
         </section>
     </main>
 
-    <!-- FOOTER -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-        :root {
-            --primary-600: #4f46e5;
-            --primary-hover: #2563eb;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* ============ LIGHT MODE ============ */
-        footer {
-            background: #fff;
-            border-top: 1px solid #e5e7eb;
-            padding: 80px 0 32px;
-            color: #6b7280;
-            font-size: 14px;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.8fr 1fr 1fr 1.4fr;
-            gap: 48px;
-            padding-bottom: 48px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .brand-logo i {
-            font-size: 24px;
-            color: #4f46e5;
-        }
-
-        .brand-logo span {
-            font-size: 20px;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        .brand-desc {
-            font-size: 13px;
-            line-height: 1.7;
-            color: #6b7280;
-            max-width: 280px;
-        }
-
-        .col-title {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: #111827;
-            margin-bottom: 20px;
-        }
-
-        .link-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .link-list a {
-            text-decoration: none;
-            color: #6b7280;
-            font-size: 13px;
-            position: relative;
-            padding-left: 0;
-            transition: color 0.2s, padding-left 0.2s;
-        }
-
-        .link-list a::before {
-            content: '→';
-            position: absolute;
-            left: -20px;
-            opacity: 0;
-            transition: opacity 0.2s, left 0.2s;
-            color: #4f46e5;
-        }
-
-        .link-list a:hover {
-            color: #4f46e5;
-            padding-left: 6px;
-        }
-
-        .link-list a:hover::before {
-            opacity: 1;
-            left: -16px;
-        }
-
-        .contact-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-bottom: 28px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        .contact-item i {
-            font-size: 18px;
-            color: #4f46e5;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* ===================== GITHUB TEAM SECTION ===================== */
-        .github-section {
-            margin-top: 40px;
-            padding: 36px 40px;
-            border-radius: 20px;
-            background: #f3f4f6;
-            border: 1px solid #e5e7eb;
-        }
-
-        .github-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
-        }
-
-        .github-header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .github-header-left i {
-            font-size: 20px;
-            color: #111827;
-        }
-
-        .github-header-left span {
-            font-size: 13px;
-            font-weight: 600;
-            color: #111827;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .github-repo-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: #4f46e5;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .github-repo-link:hover {
-            color: #2563eb;
-        }
-
-        .github-repo-link i {
-            font-size: 14px;
-        }
-
-        .github-team {
-            display: flex;
-            gap: 20px;
-        }
-
-        .github-card {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 18px 20px;
-            border-radius: 16px;
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            text-decoration: none;
-            transition: box-shadow 0.25s, transform 0.2s, border-color 0.25s;
-        }
-
-        .github-card:hover {
-            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.15), 0 8px 10px -6px rgba(79, 70, 229, 0.1);
-            border-color: #4f46e5;
-            transform: translateY(-2px);
-        }
-
-        .github-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: #e5e7eb;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .github-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .github-info {
-            min-width: 0;
-        }
-
-        .github-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: #111827;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .github-role {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 2px;
-        }
-
-        .github-handle {
-            font-size: 11px;
-            color: #4f46e5;
-            margin-top: 3px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .github-handle i {
-            font-size: 11px;
-        }
-
-        .footer-bottom {
-            padding-top: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .footer-copy {
-            font-size: 12px;
-            color: #9ca3af;
-        }
-
-        .footer-socials {
-            display: flex;
-            gap: 10px;
-        }
-
-        .social-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            background: #f3f4f6;
-            border: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6b7280;
-            text-decoration: none;
-            font-size: 17px;
-            transition: background 0.2s, color 0.2s, transform 0.15s, border-color 0.2s;
-        }
-
-        .social-btn:hover {
-            background: #4f46e5;
-            color: #fff;
-            border-color: #4f46e5;
-            transform: translateY(-2px);
-        }
-
-        /* ============ DARK MODE ============ */
-        .dark footer {
-            background: #1e1e2e;
-            border-top-color: #313244;
-            color: #a6adc8;
-        }
-
-        .dark .brand-logo span,
-        .dark .col-title {
-            color: #cdd6f4;
-        }
-
-        .dark .brand-desc,
-        .dark .link-list a,
-        .dark .contact-item {
-            color: #a6adc8;
-        }
-
-        .dark .link-list a:hover {
-            color: #fff;
-        }
-
-        .dark .github-section {
-            background: #313244;
-            border-color: #45475a;
-        }
-
-        .dark .github-header-left i,
-        .dark .github-header-left span {
-            color: #cdd6f4;
-        }
-
-        .dark .github-card {
-            background: #1e1e2e;
-            border-color: #45475a;
-        }
-
-        .dark .github-card:hover {
-            border-color: #818cf8;
-            box-shadow: 0 10px 25px -5px rgba(129, 140, 248, 0.2);
-        }
-
-        .dark .github-avatar {
-            border-color: #313244;
-        }
-
-        .dark .github-name {
-            color: #cdd6f4;
-        }
-
-        .dark .github-role {
-            color: #585b70;
-        }
-
-        .dark .footer-copy {
-            color: #585b70;
-        }
-
-        .dark .social-btn {
-            background: #313244;
-            border-color: #45475a;
-            color: #a6adc8;
-        }
-
-        .dark .social-btn:hover {
-            background: #818cf8;
-            color: #fff;
-            border-color: #818cf8;
-        }
-
-        @media (max-width: 900px) {
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 36px;
-            }
-
-            .github-team {
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 28px;
-            }
-
-            .github-section {
-                padding: 24px 20px;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-        }
-    </style>
-
-    <footer>
-        <div class="footer-container">
-            <div class="footer-grid">
-                <div>
-                    <!-- Footer Brand Logo (UPDATED: Solid Icon) -->
-                    <div class="brand-logo">
-                        <i class="ph-fill ph-wallet"></i>
-                        <span>Fintrack</span>
+    <!-- FOOTER (DIUBAH MENJADI TAILWIND CLASS) -->
+    <footer class="bg-white dark:bg-dark-surface border-t border-gray-200 dark:border-slate-800 pt-20 pb-8 text-gray-600 dark:text-gray-400 transition-colors duration-300 text-sm">
+        <div class="container mx-auto px-6 max-w-7xl">
+            
+            <!-- Footer Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12 border-b border-gray-200 dark:border-slate-800">
+                
+                <!-- Brand Column -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2.5">
+                        <i class="ph-fill ph-wallet text-2xl text-primary-600"></i>
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Fintrack</span>
                     </div>
-                    <p class="brand-desc">Aplikasi pencatatan keuangan modern yang membantu Anda menghemat waktu dan
-                        menghindari kesalahan hitung manual.</p>
+                    <p class="text-xs leading-relaxed max-w-[280px]">
+                        Aplikasi pencatatan keuangan modern yang membantu Anda menghemat waktu dan menghindari kesalahan hitung manual.
+                    </p>
                 </div>
+
+                <!-- Product Column -->
                 <div>
-                    <h4 class="col-title">Produk</h4>
-                    <ul class="link-list">
-                        <li><a href="#">Fitur</a></li>
-                        <li><a href="#">Harga</a></li>
-                        <li><a href="#">Integrasi</a></li>
+                    <h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-5">Produk</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Fitur</a></li>
+                        <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Harga</a></li>
+                        <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Integrasi</a></li>
                     </ul>
                 </div>
+
+                <!-- Company Column -->
                 <div>
-                    <h4 class="col-title">Perusahaan</h4>
-                    <ul class="link-list">
-                        <li><a href="#">Tentang Kami</a></li>
-                        <li><a href="#">Karir</a></li>
-                        <li><a href="#">Kebijakan Privasi</a></li>
+                    <h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-5">Perusahaan</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Tentang Kami</a></li>
+                        <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Karir</a></li>
+                        <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Kebijakan Privasi</a></li>
                     </ul>
                 </div>
+
+                <!-- Contact Column -->
                 <div>
-                    <h4 class="col-title">Hubungi Kami</h4>
-                    <ul class="contact-list">
-                        <li class="contact-item"><i class="ph ph-envelope"></i> Praftan12@gmail.com</li>
-                        <li class="contact-item"><i class="ph ph-whatsapp-logo"></i> +62 851 6373 0377 </li>
-                        <li class="contact-item"><i class="ph ph-map-pin"></i> Kalimantan Timur, Indonesia </li>
+                    <h4 class="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-5">Hubungi Kami</h4>
+                    <ul class="space-y-3.5">
+                        <li class="flex items-center gap-2.5">
+                            <i class="ph ph-envelope text-lg text-primary-600"></i>
+                            <span>Praftan12@gmail.com</span>
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <i class="ph ph-whatsapp-logo text-lg text-primary-600"></i>
+                            <span>+62 851 6373 0377</span>
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <i class="ph ph-map-pin text-lg text-primary-600"></i>
+                            <span>Kalimantan Timur, Indonesia</span>
+                        </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="github-section">
-                <div class="github-header">
-                    <div class="github-header-left">
-                        <i class="ph ph-github-logo ph-fill"></i>
-                        <span>Open Source · Contributors</span>
+            <!-- Github Section -->
+            <div class="mt-10 p-6 md:p-10 rounded-[1.5rem] bg-gray-100 dark:bg-dark-bg border border-gray-200 dark:border-slate-700">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-7 gap-4">
+                    <div class="flex items-center gap-2.5">
+                        <i class="ph ph-github-logo ph-fill text-2xl text-gray-900 dark:text-white"></i>
+                        <span class="font-semibold text-gray-900 dark:text-white uppercase tracking-wide text-xs">Open Source · Contributors</span>
                     </div>
-                    <a href="https://github.com/Zein-praft/financial-management-system" target="_blank"
-                        class="github-repo-link">
+                    <a href="https://github.com/Zein-praft/financial-management-system" target="_blank" class="inline-flex items-center gap-2 text-xs font-medium text-primary-600 hover:text-primary-500 transition-colors">
                         <i class="ph ph-code"></i> Fintrack Repository <i class="ph ph-arrow-up-right"></i>
                     </a>
                 </div>
-                <div class="github-team">
-                    <a href="https://github.com/Zein-praft" target="_blank" class="github-card">
-                        <div class="github-avatar"><img src="https://github.com/Zein-praft.png" alt="Zein-praft">
+
+                <div class="flex flex-col md:flex-row gap-5">
+                    <!-- Card 1 -->
+                    <a href="https://github.com/Zein-praft" target="_blank" class="flex-1 group flex items-center gap-3.5 p-5 rounded-2xl bg-white dark:bg-dark-surface border border-gray-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-0.5 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300">
+                        <div class="w-11 h-11 rounded-full overflow-hidden bg-gray-200 border-2 border-white dark:border-slate-700 shadow-sm flex-shrink-0">
+                            <img src="https://github.com/Zein-praft.png" alt="Zein-praft" class="w-full h-full object-cover">
                         </div>
-                        <div class="github-info">
-                            <div class="github-name">Zein-praft</div>
-                            <div class="github-role">Front-end</div>
-                            <div class="github-handle"><i class="ph ph-github-logo"></i> @Zein-praft</div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-semibold text-gray-900 dark:text-white truncate">Zein-praft</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-500 mt-0.5">Front-end</div>
+                            <div class="flex items-center gap-1 text-[10px] text-primary-600 mt-1">
+                                <i class="ph ph-github-logo"></i> @Zein-praft
+                            </div>
                         </div>
                     </a>
-                    <a href="https://github.com/Favianevn" target="_blank" class="github-card">
-                        <div class="github-avatar"><img src="https://github.com/Favianevn.png" alt="Avatar"></div>
-                        <div class="github-info">
-                            <div class="github-name">Favianevn</div>
-                            <div class="github-role">Back-end</div>
-                            <div class="github-handle"><i class="ph ph-github-logo"></i> @Favianevn</div>
+
+                    <!-- Card 2 -->
+                    <a href="https://github.com/Favianevn" target="_blank" class="flex-1 group flex items-center gap-3.5 p-5 rounded-2xl bg-white dark:bg-dark-surface border border-gray-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-0.5 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300">
+                        <div class="w-11 h-11 rounded-full overflow-hidden bg-gray-200 border-2 border-white dark:border-slate-700 shadow-sm flex-shrink-0">
+                            <img src="https://github.com/Favianevn.png" alt="Avatar" class="w-full h-full object-cover">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-semibold text-gray-900 dark:text-white truncate">Favianevn</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-500 mt-0.5">Back-end</div>
+                            <div class="flex items-center gap-1 text-[10px] text-primary-600 mt-1">
+                                <i class="ph ph-github-logo"></i> @Favianevn
+                            </div>
                         </div>
                     </a>
 
                     <!-- Card 3 -->
-                    <a href="https://github.com/nwisnuyasa4-afk" target="_blank" class="github-card">
-                        <div class="github-avatar"><img src="https://github.com/nwisnuyasa4-afk.png" alt="Avatar"></div>
-                        <div class="github-info">
-                            <div class="github-name">Nazril</div>
-                            <div class="github-role">QA (Quality Assurance)</div>
-                            <div class="github-handle"><i class="ph ph-github-logo"></i> @nwisnuyasa4-afk</div>
+                    <a href="https://github.com/nwisnuyasa4-afk" target="_blank" class="flex-1 group flex items-center gap-3.5 p-5 rounded-2xl bg-white dark:bg-dark-surface border border-gray-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-0.5 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300">
+                        <div class="w-11 h-11 rounded-full overflow-hidden bg-gray-200 border-2 border-white dark:border-slate-700 shadow-sm flex-shrink-0">
+                            <img src="https://github.com/nwisnuyasa4-afk.png" alt="Avatar" class="w-full h-full object-cover">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-semibold text-gray-900 dark:text-white truncate">Nazril</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-500 mt-0.5">QA (Quality Assurance)</div>
+                            <div class="flex items-center gap-1 text-[10px] text-primary-600 mt-1">
+                                <i class="ph ph-github-logo"></i> @nwisnuyasa4-afk
+                            </div>
                         </div>
                     </a>
                 </div>
             </div>
 
-            <div class="footer-bottom">
-                <span class="footer-copy">&copy; 2026 Fintrack Inc. All rights reserved.</span>
-                <div class="footer-socials">
-                    <a href="#" class="social-btn"><i class="ph ph-instagram-logo"></i></a>
-                    <a href="#" class="social-btn"><i class="ph ph-tiktok-logo"></i></a>
-                    <a href="#" class="social-btn"><i class="ph ph-github-logo"></i></a>
+            <!-- Footer Bottom -->
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-xs text-gray-500 dark:text-gray-500">&copy; 2026 Fintrack Inc. All rights reserved.</span>
+                <div class="flex gap-2.5">
+                    <a href="#" class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 bg-gray-100 dark:bg-dark-bg dark:text-gray-400 border border-transparent dark:border-slate-700 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-300">
+                        <i class="ph ph-instagram-logo text-lg"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 bg-gray-100 dark:bg-dark-bg dark:text-gray-400 border border-transparent dark:border-slate-700 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-300">
+                        <i class="ph ph-tiktok-logo text-lg"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 bg-gray-100 dark:bg-dark-bg dark:text-gray-400 border border-transparent dark:border-slate-700 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-300">
+                        <i class="ph ph-github-logo text-lg"></i>
+                    </a>
                 </div>
             </div>
         </div>
