@@ -61,9 +61,9 @@
                             <span class="text-sm font-bold text-white/80 uppercase tracking-wide font-heading">Current
                                 Balance</span>
                         </div>
-                        <div class="p-2 rounded-full bg-white/10">
-                            <i class="ph-fill ph-chart-line-up text-white"></i>
-                        </div>
+                        {{-- <div class="p-10 rounded-full bg-white/10">
+                            <i class=""></i>
+                        </div> --}}
                     </div>
                     <h3 class="text-3xl md:text-4xl font-bold text-white font-heading tracking-tight drop-shadow-sm">
                         Rp {{ number_format($balance ?? 0, 0, ',', '.') }}
