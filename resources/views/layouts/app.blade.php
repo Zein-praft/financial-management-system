@@ -120,7 +120,7 @@
                             <div class="text-right hidden sm:block">
                                 <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">
                                     {{ auth()->user()->name }}</p>
-                                <p class="text-xs text-slate-400 dark:text-slate-500">Premium User</p>
+                                <p class="text-xs text-slate-400 dark:text-slate-500">Reguler User</p>
                             </div>
                             <div
                                 class="h-10 w-10 rounded-2xl bg-slate-100 border-2 border-white dark:bg-slate-800 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-300 group-hover:border-blue-500 dark:group-hover:border-blue-400 group-hover:text-blue-500 transition-all">
