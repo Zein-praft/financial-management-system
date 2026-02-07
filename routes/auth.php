@@ -1,44 +1,42 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+// Kita tetap menggunakan Controller untuk Logout & Email Verification 
+// karena biasanya logika ini lebih rumit perlu handling khusus dari Laravel
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+
 Route::middleware(['guest'])->group(function () {
-    // Register
-    Route::get('register', [RegisteredUserController::class, 'create'])
+    
+    // ---------------------------------------------------
+    // BAGIAN LOGIN & REGISTER (LIVEWIRE)
+    // Kita arahkan langsung ke View Livewire
+    // ---------------------------------------------------
+    
+    // Register (Livewire)
+    Route::view('register', 'livewire.pages.auth.register')
                 ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
-
-    // Login
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+    // Login (Livewire)
+    Route::view('login', 'livewire.pages.auth.login')
                 ->name('login');
 
-    // ---- PASTIKAN BARIS INI ADA (POST LOGIN) ----
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
-    // ----------------------------------------------
-
-    // Forgot Password
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+    // Forgot Password (Livewire)
+    Route::view('forgot-password', 'livewire.pages.auth.forgot-password')
                 ->name('password.request');
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-                ->name('password.email');
-
-    // Reset Password
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->name('password.reset');
-
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-                ->name('password.store');
+    // Reset Password (Livewire)
+    // Karena ada parameter {token}, kita pakai function kecil untuk melempar token ke view
+    Route::get('reset-password/{token}', function ($token) {
+        return view('livewire.pages.auth.reset-password', ['token' => $token]);
+    })->name('password.reset');
 });
 
 Route::middleware(['auth'])->group(function () {
-    // Email Verification
+    
+    // Email Verification (Biarkan pakai Controller Laravel Standar)
     Route::get('verify-email', [VerifyEmailController::class, '__invoke'])
                 ->name('verification.notice');
 
@@ -46,11 +44,11 @@ Route::middleware(['auth'])->group(function () {
                 ->middleware(['signed', 'throttle:6,1'])
                 ->name('verification.verify');
 
-    Route::post('email/verification-notification', [\App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
                 ->middleware('throttle:6,1')
                 ->name('verification.send');
 
-    // Logout
+    // Logout (Biarkan pakai Controller Laravel Standar)
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });

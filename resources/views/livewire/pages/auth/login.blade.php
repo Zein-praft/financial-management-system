@@ -49,12 +49,12 @@
     {{-- <div class="min-h-screen flex items-center justify-center py-10 px-10 sm:px-6 lg:px-8 relative overflow-hidden"> --}}
 
     <!-- Background Decorations -->
-    <div
+    {{-- <div
         class="absolute top-0 left-0 w-96 h-96 bg-purple-300 dark:bg-indigo-900 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob -translate-x-1/2 -translate-y-1/2">
     </div>
     <div
         class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-300 dark:bg-purple-900 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 translate-x-1/2 translate-y-1/2">
-    </div>
+    </div> --}}
 
     <!-- CARD LOGIN UTAMA -->
     <div
@@ -86,8 +86,7 @@
                 </h1>
 
                 <p class="text-indigo-100 text-sm md:text-base leading-relaxed font-medium opacity-90">
-                    Platform all-in-one yang dirancang untuk mengontrol alur kas bisnis Anda dengan akurasi dan
-                    kecepatan tinggi.
+                    Platform all-in-one yang dirancang untuk mengontrol alur kas bisnis Anda.
                 </p>
             </div>
 
